@@ -6,14 +6,14 @@ const brands = ['Todos', 'Ron', 'Tequila', 'Whiskey', 'Vodka', 'Ginebra', 'Vermo
 const BrandSection = () => {
   return (
     <section className="brands">
-      <h2>Licores con los que trabajamos:</h2>
+      <h2 className="brands-title">Licores con los que trabajamos:</h2>
       <div className="brand-list">
         {brands.map((brand, index) => (
           <div key={index} className="brand">
             {brand}
           </div>
         ))}
-        </div>
+      </div>
     </section>
   );
 };
