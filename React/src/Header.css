@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  position: sticky;
+  top: 0;
+}
+
+.header-left button,
+.header-right button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 18px;
+}
