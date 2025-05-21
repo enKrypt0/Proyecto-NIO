@@ -11,20 +11,29 @@ body, html {
 }
 
 .hero {
+  width: 100%;
+  min-height: 350px;
   background-image: url('./assets/background.jpg');
-  background-size: cover;
-  background-position: center;
-  color: white;
-  padding: 60px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-content {
+  background: rgba(0,0,0,0.4);
+  padding: 2rem;
+  border-radius: 12px;
+  color: #fff;
   text-align: center;
+  width: 100%;
+  max-width: 700px;
 }
 
-.hero-content h1 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
-
-.hero-content p {
-  max-width: 600px;
-  margin: 0 auto;
+.footer {
+  width: 100%;
+  background: #222;
+  color: #fff;
+  text-align: center;
+  padding: 2rem 0 1rem 0;
+  margin-top: 2rem;
 }

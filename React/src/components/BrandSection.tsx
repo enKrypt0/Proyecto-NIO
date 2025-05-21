@@ -1,18 +1,18 @@
-import './BrandSection.css';
+import '../BrandSection.css';
 
-const brands = ['Absolut', 'Bacardi', 'Tanqueray', 'Johnnie Walker']; // puedes añadir más
+const brands = ['Todos', 'Ron', 'Tequila', 'Johnnie Walker']; // Se pueden añadir mas, usando esta constante se despliegan automaticamente
 
 const BrandSection = () => {
   return (
     <section className="brands">
-      <h2>Our Brands</h2>
+      <h2>Marcas con las que trabajamos:</h2>
       <div className="brand-list">
         {brands.map((brand, index) => (
           <div key={index} className="brand">
             {brand}
           </div>
         ))}
-      </div>
+        </div>
     </section>
   );
 };

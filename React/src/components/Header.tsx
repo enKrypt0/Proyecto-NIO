@@ -1,16 +1,18 @@
-import './Header.css';
+import '../Header.css';
 
 const Header = () => {
   return (
     <header className="header">
       <div className="header-left">
-        <button>☰</button>
-        <button>🔍</button>
+        <button className="menu-btn">☰</button>
+        <button className="menu-btn">🔍</button>
       </div>
-      <div className="logo">NIO COCKTAILS</div>
+      <div className="logo">
+        <h1>NIO COCKTAILS</h1>
+      </div>
       <div className="header-right">
-        <button>👤</button>
-        <button>🛒</button>
+        <button className="menu-btn">👤</button>
+        <button className="menu-btn">🛒</button>
       </div>
     </header>
   );
