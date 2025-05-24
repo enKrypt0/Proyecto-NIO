@@ -1,5 +1,5 @@
 {
-  "name": "Licoreria Virtual",
+  "name": "licoreria-virtual",
   "private": true,
   "scripts": {
     "build": "turbo run build",
