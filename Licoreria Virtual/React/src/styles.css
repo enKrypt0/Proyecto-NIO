@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+body {
+  background: #1e293b;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #111;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.coctelera-virtual {
+  max-width: 700px;
+  margin: 2rem auto;
+  background: #334155;
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  padding: 2rem;
+  color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.coctelera-seleccionadores {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+
+.selector-licor, .selector-ingredientes, .selector-frutas {
+  flex: 1 1 180px;
+  background: #475569;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.selector-licor select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #64748b;
+  background: #1e293b;
+  color: #111;
+}
+
+.selector-ingredientes label, .selector-frutas label {
+  display: block;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.vista-previa {
+  background: #334155;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.10);
+  color: #111;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ingredientes-seleccionados ul,
+.posibles-sabores ul,
+.recomendaciones-automaticas ul {
+  list-style: disc inside;
+  margin: 0.5rem 0 0 1rem;
+  padding: 0;
+}
+
+.ingredientes-seleccionados li,
+.posibles-sabores li,
+.recomendaciones-automaticas li {
+  margin-bottom: 0.25rem;
+}
+
+.posibles-sabores {
+  margin-top: 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.recomendaciones, .recomendaciones-automaticas {
+  margin-top: 1.5rem;
+  background: #0ea5e9;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  color: #111;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.recomendaciones h4, .recomendaciones-automaticas h4 {
+  margin-bottom: 0.5rem;
+  color: #0369a1;
+  text-align: center;
+}
+
+.ingredientes-botones {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.ingrediente-boton {
+  background: #64748b;
+  color: #111;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.ingrediente-boton.seleccionado {
+  background: #0ea5e9;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(14,165,233,0.15);
+}
+
+.ingrediente-boton:hover {
+  background: #0369a1;
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .coctelera-seleccionadores {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .coctelera-virtual {
+    padding: 1rem;
+  }
+  .vista-previa {
+    padding: 1rem;
+  }
+}
