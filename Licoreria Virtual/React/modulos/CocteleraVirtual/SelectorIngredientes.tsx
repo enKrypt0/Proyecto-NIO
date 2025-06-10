@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface SelectorIngredientesProps {
   licor: string
@@ -6,88 +6,30 @@ interface SelectorIngredientesProps {
   setIngredientes: (ingredientes: string[]) => void
 }
 
-const opcionesGenerales = ['limón', 'sal', 'azúcar', 'hielo']
-const opcionesRon = [
-  'Jugo de limon',
-  'Menta',
-  'Azucar moreno',
-  'Jarabe simple',
-  'Soda',
-  'Agua con gas',
-  'Jugo de piña',
-  'Jugo de naranja',
-  'Coca-Cola',
-  'Agua de coco',
-  'Angostura',
-  'Hielo',
-]
-
-const opcionesTequila = [
-  'Jugo de limon',
-  'Triple sec',
-  'Sal',
-  'Miel',
-  'Jugo de naranja',
-  'Jarabe de agave',
-  'Refresco de toronja',
-  'Sangrita',
-  'Hielo',
-]
-
-const opcionesWhisky = [
-  'Vermouth Dulce',
-  'Angostura',
-  'Azucar',
-  'Soda',
-  'Huevo',
-  'Miel',
-]
-
-const opcionesVodka = [
-    'Jugo de arándano',
-    'Jugo de naranja',
-    'Jugo de limon',
-    'Azucar',
-    'Jarabe Simple',
-    'Soda',
-    'Tónica',
-    'Menta',
-    'Jarabe de granadina',
-    'Hielo',
-]
-
-const opcionesGinebra = [
-    'Jugo de limon',
-    'Tónica',
-    'Romero',
-    'Menta',
-    'Jugo de arándano',
-    'Jugo de naranja',
-    'Lavanda',
-    'Hielo',
-]
-
-const opcionesVermouth = [
-    'Soda',
-    'Agua con gas',
-    'Limon',
-]
+interface Ingrediente {
+  id: string
+  nombre: string
+  tipo_ingrediente: string
+}
 
 const SelectorIngredientes: React.FC<SelectorIngredientesProps> = ({ licor, ingredientes, setIngredientes }) => {
-  const opciones =
-        licor === 'Ron'
-        ? opcionesRon
-        : licor === 'Tequila'
-        ? opcionesTequila
-        : licor === 'Whisky'
-        ? opcionesWhisky
-        : licor === 'Vodka'
-        ? opcionesVodka
-        : licor === 'Ginebra'
-        ? opcionesGinebra
-        : licor === 'Vermouth'
-        ? opcionesVermouth
-        : opcionesGenerales
+  const [todos, setTodos] = useState<Ingrediente[]>([])
+
+  useEffect(() => {
+    fetch('http://localhost:3001/ingredientes')
+      .then(res => res.json())
+      .then(data => setTodos(data))
+      .catch(err => console.error('Error al obtener ingredientes:', err))
+  }, [])
+
+  // Filtrado simple por tipo de licor (puedes mejorar la lógica según tu modelo)
+  let opciones: string[] = []
+  if (licor) {
+    // Ejemplo: puedes filtrar por tipo_ingrediente o por nombre según el licor
+    opciones = todos.map(i => i.nombre)
+  } else {
+    opciones = todos.map(i => i.nombre)
+  }
 
   const handleClick = (value: string) => {
     setIngredientes(

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface SelectorFrutasProps {
   licor: string
@@ -6,29 +6,20 @@ interface SelectorFrutasProps {
   setFrutas: (frutas: string[]) => void
 }
 
-const opcionesGenerales = ['piña', 'naranja', 'fresa', 'mango']
-const opcionesRon = ['Mango', 'Maracuyá']
-const opcionesTequila = ['Jalapeño', 'Pepino']
-const opcionesWhisky = ['Cereza', 'Naranja', 'Limon', 'Cafe']
-const opcionesVodka = ['Frambuesa', 'Fresa', 'Cafe', 'Pepino', 'Limon']
-const opcionesGinebra = ['Pepino', 'Limon', 'Fresa', 'Naranja', 'Toronja']
-const opcionesVermouth = ['Naranja', 'Aceituna', 'Limon']
+interface Fruta {
+  id: string
+  nombre: string
+}
 
-const SelectorFrutas: React.FC<SelectorFrutasProps> = ({ licor, frutas, setFrutas }) => {
-  const opciones = 
-        licor === 'Ron'
-        ? opcionesRon
-        : licor === 'Tequila'
-        ? opcionesTequila
-        : licor === 'Whisky'
-        ? opcionesWhisky
-        : licor === 'Vodka'
-        ? opcionesVodka
-        : licor === 'Ginebra'
-        ? opcionesGinebra
-        : licor === 'Vermouth'
-        ? opcionesVermouth
-        : opcionesGenerales
+const SelectorFrutas: React.FC<SelectorFrutasProps> = ({frutas, setFrutas }) => {
+  const [opciones, setOpciones] = useState<string[]>([])
+
+  useEffect(() => {
+    fetch('http://localhost:3001/frutas')
+      .then(res => res.json())
+      .then(data => setOpciones(data.map((f: Fruta) => f.nombre)))
+      .catch(err => console.error('Error al obtener frutas:', err))
+  }, [])
 
   const handleClick = (value: string) => {
     setFrutas(

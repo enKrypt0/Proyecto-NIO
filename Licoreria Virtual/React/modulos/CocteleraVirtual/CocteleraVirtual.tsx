@@ -5,7 +5,11 @@ import SelectorIngredientes from './SelectorIngredientes'
 import SelectorFrutas from './SelectorFrutas'
 import VistaPrevia from '../VistaPrevia/VistaPrevia'
 
-const CocteleraVirtual: React.FC = () => {
+interface CocteleraVirtualProps {
+  onVolver: () => void;
+}
+
+const CocteleraVirtual: React.FC<CocteleraVirtualProps> = ({ onVolver }) => {
   const [licor, setLicor] = useState('')
   const [marca, setMarca] = useState('')
   const [ingredientes, setIngredientes] = useState<string[]>([])
@@ -19,7 +23,13 @@ const CocteleraVirtual: React.FC = () => {
   }
 
   return (
-    <div className="coctelera-virtual">
+    <div className="coctelera-virtual" style={{ position: 'relative' }}>
+      <button
+        className="btn-volver-coctelera"
+        onClick={onVolver}
+      >
+        Volver
+      </button>
       <h1>Coctelera Virtual</h1>
       <div className="coctelera-tarjetas">
         <div className="tarjeta-seleccion tarjeta-licor">

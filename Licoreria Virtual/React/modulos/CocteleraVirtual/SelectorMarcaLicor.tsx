@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface SelectorMarcaLicorProps {
   licor: string
@@ -6,54 +6,53 @@ interface SelectorMarcaLicorProps {
   setMarca: (marca: string) => void
 }
 
-const marcasPorLicor: Record<string, string[]> = {
-  Tequila: ['Don Julio', 'Patrón', 'Jose Cuervo', 'Karnal'],
-  Ron: ['Bacardí', 'Havana Club', 'Flor de Caña'],
-  Vodka: ['Absolut', 'Smirnoff', 'Grey Goose'],
-  Whisky: ['Johnnie Walker', 'Jack Daniels', 'Chivas Regal'],
-  Ginebra: ['Beefeater', 'Bombay Sapphire', 'Tanqueray'],
-  Vermouth: ['Martini', 'Cinzano', 'Noilly Prat'],
-}
-
-const imagenesMarcas: Record<string, string> = {
-  'Don Julio': '/marcas/don-julio.jpeg',
-  'Patrón': '/marcas/patron.jpeg',
-  'Jose Cuervo': '/marcas/jose-cuervo.jpeg',
-  'Bacardí': '/marcas/bacardi.jpeg',
-  'Havana Club': '/marcas/havana-club.jpeg',
-  'Flor de Caña': '/marcas/flor-de-caña.jpeg',
-  'Absolut' : '/marcas/absolut.jpeg',
-  'Smirnoff' : '/marcas/smirnoff.jpeg',
-  'Grey Goose' : '/marcas/grey-goose.jpeg',
-  'Johnnie Walker' : '/marcas/johnnie-walker.jpeg',
-  'Jack Daniels' : '/marcas/jack-daniels.jpeg',
-  'Chivas Regal' : '/marcas/chivas-regal.jpeg',
-  'Beefeater' : '/marcas/beefeater.jpeg',
-  'Bombay Sapphire' : '/marcas/bombay-sapphire.jpeg',
-  'Tanqueray' : '/marcas/tanqueray.jpeg',
-  'Martini' : '/marcas/martini.jpeg',
-  'Cinzano' : '/marcas/cinzano.jpeg',
-  'Noilly Prat' : '/marcas/noilly-prat.jpeg',
-  'Karnal' : '/marcas/karnal.jpeg'
+interface Marca {
+  id: string
+  nombre: string
+  tipo_licor_id: string
+  imagen: string // Nueva propiedad para la imagen
 }
 
 const SelectorMarcaLicor: React.FC<SelectorMarcaLicorProps> = ({ licor, marca, setMarca }) => {
-  const marcas = marcasPorLicor[licor] || []
+  const [marcas, setMarcas] = useState<Marca[]>([])
+  const [tiposLicor, setTiposLicor] = useState<{ id: string, nombre: string }[]>([])
+
+  // Obtener tipos de licor para mapear nombre a id
+  useEffect(() => {
+    fetch('http://localhost:3001/tipos_licor')
+      .then(res => res.json())
+      .then(data => setTiposLicor(data))
+      .catch(err => console.error('Error al obtener tipos de licor:', err))
+  }, [])
+
+  // Obtener todas las marcas
+  useEffect(() => {
+    fetch('http://localhost:3001/marcas')
+      .then(res => res.json())
+      .then(data => setMarcas(data))
+      .catch(err => console.error('Error al obtener marcas:', err))
+  }, [])
+
+  // Buscar el id del tipo de licor seleccionado
+  const tipoLicor = tiposLicor.find(t => t.nombre === licor)
+  const marcasFiltradas = tipoLicor
+    ? marcas.filter(m => m.tipo_licor_id === tipoLicor.id)
+    : []
 
   return (
     <div className="selector-marca-licor-tarjetas">
-      {marcas.map(m => (
+      {marcasFiltradas.map(m => (
         <div
-          key={m}
-          className={`tarjeta-marca-licor${marca === m ? ' seleccionada' : ''}`}
-          onClick={() => setMarca(m)}
+          key={m.id}
+          className={`tarjeta-marca-licor${marca === m.nombre ? ' seleccionada' : ''}`}
+          onClick={() => setMarca(m.nombre)}
         >
           <div className="marca-imagen-card">
             <div className="marca-imagen">
-              <img src={imagenesMarcas[m]} alt={m} />
+              <img src={m.imagen} alt={m.nombre} />
             </div>
           </div>
-          <div className="marca-titulo">{m}</div>
+          <div className="marca-titulo">{m.nombre}</div>
         </div>
       ))}
     </div>

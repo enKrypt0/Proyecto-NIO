@@ -1,10 +1,9 @@
-// src/App.tsx
-import CocteleraVirtual from '../modulos/CocteleraVirtual/CocteleraVirtual'
+import Home from '../modulos/Inicio/home.tsx'
 
 function App() {
   return (
     <div>
-      <CocteleraVirtual />
+      <Home />
     </div>
   )
 }
