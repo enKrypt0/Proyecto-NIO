@@ -1,0 +1,56 @@
+<!-- component -->
+<div class="bg-blue-900 flex justify-center items-center h-screen">
+  <!-- Left: Image -->
+  <div class="w-1/2 h-screen hidden lg:block">
+    <img src="https://telusworldofscienceedmonton.ca/media/images/WSMC_2024_Webpage.860ec478.fill-1920x1080.format-webp.webp" alt="Placeholder Image" class="object-cover w-full h-full">
+  </div>
+  <!-- Right: Login Form -->
+  <div class="bg-gradient-to-b from-blue-900 via-gray-800 to-gray-900 lg:p-36 md:p-52 sm:p-20 p-8 w-full lg:w-1/2">
+    <h1 class="text-4xl font-extrabold mb-4 text-blue-400 drop-shadow-lg text-center">NioCocktails</h1>  
+    <h2 class="text-2xl font-semibold mb-4 text-white">Login</h2>
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm" autocomplete="off">
+      <!-- Email Input -->
+      <div class="mb-4">
+        <label for="email" class="block text-white">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          required
+          class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+          autocomplete="off"
+        >
+      </div>
+      <!-- Password Input -->
+      <div class="mb-4">
+        <label for="password" class="block text-white">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="password"
+          required
+          class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+          autocomplete="off"
+        >
+      </div>
+      <!-- Remember Me Checkbox -->
+      <div class="mb-4 flex items-center">
+        <input type="checkbox" id="remember" name="remember" [(ngModel)]="remember" class="text-blue-500">
+        <label for="remember" class="text-white ml-2">Remember Me</label>
+      </div>
+      <!-- Forgot Password Link -->
+      <div class="mb-6 text-blue-500">
+        <a href="#" class="hover:underline">Forgot Password?</a>
+      </div>
+      <!-- Login Button -->
+      <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full">Login</button>
+      <div ngIf="error" class="text-red-500 mt-2 text-center">{{ error }}</div>
+    </form>
+    <!-- Sign up  Link -->
+    <div class="mt-6 text-blue-500 text-center">
+      <a href="#" class="hover:underline">Sign up Here</a>
+    </div>
+  </div>
+</div>
