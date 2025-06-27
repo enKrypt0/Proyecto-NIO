@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import supabase from '../../src/config/supabase'
 
 interface SelectorFrutasProps {
   licor: string
@@ -15,11 +16,16 @@ const SelectorFrutas: React.FC<SelectorFrutasProps> = ({frutas, setFrutas }) => 
   const [opciones, setOpciones] = useState<string[]>([])
 
   useEffect(() => {
-    fetch('http://localhost:3001/frutas')
-      .then(res => res.json())
-      .then(data => setOpciones(data.map((f: Fruta) => f.nombre)))
-      .catch(err => console.error('Error al obtener frutas:', err))
-  }, [])
+  const fetchFrutas = async () => {
+    const { data, error } = await supabase.from('frutas').select('*')
+    if (error) {
+      console.error('Error al obtener frutas:', error)
+      return
+    }
+    setOpciones(data ? data.map((f: Fruta) => f.nombre) : [])
+  }
+  fetchFrutas()
+}, [])
 
   const handleClick = (value: string) => {
     setFrutas(

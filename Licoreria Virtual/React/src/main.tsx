@@ -1,10 +1,21 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
 import './index.css'
-import App from './App.tsx'
+import { CarritoProvider } from '../modulos/Pedidos/Carrito'
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+function Root() {
+  const [usuarioId, setUsuarioId] = useState<string | undefined>(undefined);
+
+  return (
+    <CarritoProvider usuarioId={usuarioId}>
+      <App setUsuarioId={setUsuarioId} />
+    </CarritoProvider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <Root />
+  </React.StrictMode>
 )

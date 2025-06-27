@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import supabase from '../../src/config/supabase'
 
 interface SelectorLicorProps {
   licor: string
@@ -14,10 +15,15 @@ const SelectorLicor: React.FC<SelectorLicorProps> = ({ licor, setLicor }) => {
   const [licores, setLicores] = useState<string[]>([])
 
   useEffect(() => {
-    fetch('http://localhost:3001/tipos_licor')
-      .then(res => res.json())
-      .then(data => setLicores(data.map((l: TipoLicor) => l.nombre)))
-      .catch(err => console.error('Error al obtener licores:', err))
+    const fetchFrutas = async () => {
+      const { data, error } = await supabase.from('tipos_licor').select('*')
+      if (error) {
+        console.error('Error al obtener tipos de licores:', error)
+        return
+      }
+      setLicores(data ? data.map((f: TipoLicor) => f.nombre) : [])
+    }
+    fetchFrutas()
   }, [])
 
   return (

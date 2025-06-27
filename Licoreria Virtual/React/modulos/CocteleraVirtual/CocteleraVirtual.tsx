@@ -4,6 +4,8 @@ import SelectorMarcaLicor from './SelectorMarcaLicor'
 import SelectorIngredientes from './SelectorIngredientes'
 import SelectorFrutas from './SelectorFrutas'
 import VistaPrevia from '../VistaPrevia/VistaPrevia'
+import { useCarrito } from '../Pedidos/Carrito'
+import type { ItemCarrito } from '../Pedidos/Carrito'
 
 interface CocteleraVirtualProps {
   onVolver: () => void;
@@ -14,6 +16,35 @@ const CocteleraVirtual: React.FC<CocteleraVirtualProps> = ({ onVolver }) => {
   const [marca, setMarca] = useState('')
   const [ingredientes, setIngredientes] = useState<string[]>([])
   const [frutas, setFrutas] = useState<string[]>([])
+  const [nombreCoctel, setNombreCoctel] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const PRECIO_COCTEL_PERSONALIZADO = 8.99;
+  const { agregar } = useCarrito();
+
+  const handlePedirCoctel = () => {
+    if (!nombreCoctel.trim()) {
+      setError('El nombre del cóctel es obligatorio');
+      return;
+    }
+    setError(null);
+    const item: ItemCarrito = {
+      coctel_id: crypto.randomUUID(),
+      nombre: nombreCoctel,
+      licor,
+      marca,
+      ingredientes,
+      frutas,
+      cantidad: 1,
+      precio_unitario: PRECIO_COCTEL_PERSONALIZADO,
+      imagen: '',
+    };
+    agregar(item);
+    setLicor('');
+    setMarca('');
+    setIngredientes([]);
+    setFrutas([]);
+    setNombreCoctel('');
+  };
 
   const handleSetLicor = (nuevoLicor: string) => {
     setLicor(nuevoLicor)
@@ -56,6 +87,22 @@ const CocteleraVirtual: React.FC<CocteleraVirtualProps> = ({ onVolver }) => {
         )}
       </div>
       <VistaPrevia licor={licor} marca={marca} ingredientes={ingredientes} frutas={frutas} />
+      <input
+        type="text"
+        placeholder="Nombre del cóctel personalizado"
+        value={nombreCoctel}
+        onChange={e => setNombreCoctel(e.target.value)}
+        style={{ width: '100%', marginBottom: 12, padding: 8, borderRadius: 6, border: '1px solid #38bdf8', fontSize: '1.1rem' }}
+      />
+      {error && <div style={{ color: 'red', marginBottom: 8 }}>{error}</div>}
+      <button
+        className="carrito-btn-finalizar"
+        style={{ marginTop: 16 }}
+        onClick={handlePedirCoctel}
+        disabled={!licor || !marca || !nombreCoctel.trim()}
+      >
+        Pedir Coctel Personalizado
+      </button>
     </div>
   )
 }

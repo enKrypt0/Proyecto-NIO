@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import supabase from '../../src/config/supabase'
 
 interface SelectorMarcaLicorProps {
   licor: string
@@ -10,7 +11,7 @@ interface Marca {
   id: string
   nombre: string
   tipo_licor_id: string
-  imagen: string // Nueva propiedad para la imagen
+  imagen: string
 }
 
 const SelectorMarcaLicor: React.FC<SelectorMarcaLicorProps> = ({ licor, marca, setMarca }) => {
@@ -19,18 +20,28 @@ const SelectorMarcaLicor: React.FC<SelectorMarcaLicorProps> = ({ licor, marca, s
 
   // Obtener tipos de licor para mapear nombre a id
   useEffect(() => {
-    fetch('http://localhost:3001/tipos_licor')
-      .then(res => res.json())
-      .then(data => setTiposLicor(data))
-      .catch(err => console.error('Error al obtener tipos de licor:', err))
+    const fetchTiposLicor = async () => {
+      const { data, error } = await supabase.from('tipos_licor').select('id, nombre')
+      if (error) {
+        console.error('Error al obtener tipos de licor:', error)
+        return
+      }
+      setTiposLicor(data || [])
+    }
+    fetchTiposLicor()
   }, [])
 
   // Obtener todas las marcas
   useEffect(() => {
-    fetch('http://localhost:3001/marcas')
-      .then(res => res.json())
-      .then(data => setMarcas(data))
-      .catch(err => console.error('Error al obtener marcas:', err))
+    const fetchMarcas = async () => {
+      const { data, error } = await supabase.from('marcas').select('*')
+      if (error) {
+        console.error('Error al obtener marcas:', error)
+        return
+      }
+      setMarcas(data || [])
+    }
+    fetchMarcas()
   }, [])
 
   // Buscar el id del tipo de licor seleccionado
