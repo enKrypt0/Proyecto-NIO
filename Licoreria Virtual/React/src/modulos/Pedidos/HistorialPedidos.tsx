@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DetallePedido from './DetallePedido';
+import supabase from '../../config/supabase';
 
 interface Pedido {
   id: string;
@@ -18,12 +19,29 @@ const HistorialPedidos: React.FC<HistorialPedidosProps> = ({ usuarioId }) => {
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState<string | null>(null);
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`http://localhost:3001/pedidos?usuario_id=${usuarioId}`)
-      .then(res => res.json())
-      .then(data => setPedidos(data))
-      .catch(() => setError('No se pudo cargar el historial'))
-      .finally(() => setLoading(false));
+    const fetchPedidos = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const { data, error } = await supabase
+          .from('pedidos')
+          .select('id, fecha_pedido, estado')
+          .eq('usuario_id', usuarioId)
+          .order('fecha_pedido', { ascending: false });
+        if (error) {
+          setError('No se pudo cargar el historial');
+          setPedidos([]);
+        } else {
+          setPedidos(data || []);
+        }
+      } catch (e) {
+        setError('No se pudo cargar el historial');
+        setPedidos([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPedidos();
   }, [usuarioId]);
 
   if (pedidoSeleccionado) {

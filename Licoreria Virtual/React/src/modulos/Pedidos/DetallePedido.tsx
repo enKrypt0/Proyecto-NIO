@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import supabase from '../../config/supabase';
 
 interface DetallePedidoProps {
   pedidoId: string;
@@ -22,12 +23,45 @@ const DetallePedido: React.FC<DetallePedidoProps> = ({ pedidoId, onVolver }) => 
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`http://localhost:3001/detalles_pedido?pedido_id=${pedidoId}`)
-      .then(res => res.json())
-      .then(data => setDetalles(data))
-      .catch(() => setError('No se pudo cargar el detalle'))
-      .finally(() => setLoading(false));
+    const fetchDetalles = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const { data, error } = await supabase
+          .from('detalles_pedido')
+          .select(`
+            id,
+            producto_id,
+            coctel_id,
+            cantidad,
+            precio_unitario,
+            producto:producto_id (nombre, imagen),
+            coctel:coctel_id (nombre, imagen)
+          `)
+          .eq('pedido_id', pedidoId);
+        if (error) {
+          setError('No se pudo cargar el detalle');
+          setDetalles([]);
+        } else {
+          // Normaliza los datos para mostrar nombre e imagen
+          const detallesNormalizados = (data || []).map((d: any) => ({
+            id: d.id,
+            producto_id: d.producto_id,
+            coctel_id: d.coctel_id,
+            cantidad: d.cantidad,
+            precio_unitario: d.precio_unitario,
+            producto_nombre: d.producto?.nombre,
+            coctel_nombre: d.coctel?.nombre,
+            imagen: d.producto?.imagen || d.coctel?.imagen,
+          }));
+          setDetalles(detallesNormalizados);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDetalles();
   }, [pedidoId]);
 
   return (

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
-import { CarritoProvider } from '../modulos/Pedidos/Carrito'
+import { CarritoProvider } from './modulos/Pedidos/Carrito'
 
 function Root() {
   const [usuarioId, setUsuarioId] = useState<string | undefined>(undefined);

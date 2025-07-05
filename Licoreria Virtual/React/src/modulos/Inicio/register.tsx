@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import supabase from '../../src/config/supabase'
+import supabase from '../../config/supabase'
 
 interface RegisterProps {
   onRegister: (usuario: any) => void;
@@ -13,33 +13,46 @@ const Register: React.FC<RegisterProps> = ({ onRegister, onVolver }) => {
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      setError('');
-      const { data, error } = await supabase.auth.signUp({
+    e.preventDefault();
+    setError('');
+    // Validación de contraseña fuerte SOLO aquí
+    if (!/[a-z]/.test(contrasena) || !/[A-Z]/.test(contrasena) || !/[0-9]/.test(contrasena)) {
+      setError('La contraseña debe tener al menos una minúscula, una mayúscula y un número.');
+      return;
+    }
+    const { data, error: signUpError } = await supabase.auth.signUp({
+      email: correo,
+      password: contrasena,
+    });
+    if (signUpError) {
+      setError(signUpError.message || 'Error al registrar');
+      return;
+    }
+
+    // Si el registro fue exitoso y NO requiere confirmación de email
+    if (data.user) {
+      // Inserta en la tabla usuarios
+      const { error: insertError } = await supabase.from('usuarios').insert([
+        { id: data.user.id, nombre, correo }
+      ]);
+      if (insertError) {
+        setError(insertError.message || 'Error al guardar usuario en la base de datos');
+        return;
+      }
+      // Login automático
+      const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
         email: correo,
         password: contrasena,
       });
-      if (error) {
-        setError(error.message || 'Error al registrar');
+      if (loginError) {
+        setError(loginError.message || 'Error al iniciar sesión automáticamente');
         return;
       }
-      if (data.user) {
-        const { error: insertError } = await supabase.from('usuarios').insert([
-          {
-            id: data.user.id,
-            nombre,
-            correo
-          }
-        ]);
-        if (insertError) {
-          setError('Error al guardar usuario en la base de datos');
-          return;
-        }
-        onRegister(data.user);
-      } else {
-        setError('No se pudo registrar el usuario');
-      }
-    };
+      onRegister(loginData.user);
+    } else {
+      setError('Revisa tu correo para confirmar la cuenta antes de continuar.');
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: 350, margin: '2rem auto', background: '#334155', padding: 24, borderRadius: 12 }}>

@@ -1,5 +1,5 @@
-import supabase from '../../src/config/supabase'
-import { ItemCarrito } from './Carrito.tsx';
+import supabase from '../../config/supabase'
+import type { ItemCarrito } from './Carrito';
 
 export async function enviarPedido(usuario_id: string, items: ItemCarrito[]) {
   // Se crea el pedido
