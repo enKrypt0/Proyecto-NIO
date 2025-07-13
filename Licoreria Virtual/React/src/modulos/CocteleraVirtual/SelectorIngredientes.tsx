@@ -13,29 +13,20 @@ interface Ingrediente {
   tipo_ingrediente: string
 }
 
-const SelectorIngredientes: React.FC<SelectorIngredientesProps> = ({ licor, ingredientes, setIngredientes }) => {
-  const [todos, setTodos] = useState<Ingrediente[]>([])
+const SelectorIngredientes: React.FC<SelectorIngredientesProps> = ({ ingredientes, setIngredientes }) => {
+  const [opciones, setOpciones] = useState<string[]>([])
 
   useEffect(() => {
-  const fetchFrutas = async () => {
-    const { data, error } = await supabase.from('coctel_ingredientes').select('*')
-    if (error) {
-      console.error('Error al obtener ingredientes:', error)
-      return
+    const fetchIngredientes = async () => {
+      const { data, error } = await supabase.from('ingredientes').select('*')
+      if (error) {
+        console.error('Error al obtener ingredientes:', error)
+        return
+      }
+      setOpciones(data ? data.map((i: Ingrediente) => i.nombre) : [])
     }
-    setTodos(data ? data : [])
-  }
-  fetchFrutas()
-}, [])
-
-  // Filtrado simple por tipo de licor (puedes mejorar la lógica según tu modelo)
-  let opciones: string[] = []
-  if (licor) {
-    // Ejemplo: puedes filtrar por tipo_ingrediente o por nombre según el licor
-    opciones = todos.map(i => i.nombre)
-  } else {
-    opciones = todos.map(i => i.nombre)
-  }
+    fetchIngredientes()
+  }, [])
 
   const handleClick = (value: string) => {
     setIngredientes(

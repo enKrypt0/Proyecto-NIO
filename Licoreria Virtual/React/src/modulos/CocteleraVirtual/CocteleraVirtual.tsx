@@ -18,8 +18,22 @@ const CocteleraVirtual: React.FC<CocteleraVirtualProps> = ({ onVolver }) => {
   const [frutas, setFrutas] = useState<string[]>([])
   const [nombreCoctel, setNombreCoctel] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [notificacion, setNotificacion] = useState<string | null>(null);
   const PRECIO_COCTEL_PERSONALIZADO = 8.99;
   const { agregar } = useCarrito();
+  
+
+  const mostrarNotificacion = (mensaje: string) => {
+    setNotificacion(mensaje);
+    setTimeout(() => setNotificacion(null), 3000); // 3 segundos
+  };
+
+  const handleSetLicor = (nuevoLicor: string) => {
+    setLicor(nuevoLicor)
+    setMarca('')
+    setIngredientes([])
+    setFrutas([])
+  }
 
   const handlePedirCoctel = () => {
     if (!nombreCoctel.trim()) {
@@ -39,19 +53,13 @@ const CocteleraVirtual: React.FC<CocteleraVirtualProps> = ({ onVolver }) => {
       imagen: '',
     };
     agregar(item);
+    mostrarNotificacion(`"${nombreCoctel}" añadido como cóctel personalizado`);
     setLicor('');
     setMarca('');
     setIngredientes([]);
     setFrutas([]);
     setNombreCoctel('');
   };
-
-  const handleSetLicor = (nuevoLicor: string) => {
-    setLicor(nuevoLicor)
-    setMarca('')
-    setIngredientes([])
-    setFrutas([])
-  }
 
   return (
     <div className="coctelera-virtual" style={{ position: 'relative' }}>
@@ -67,6 +75,11 @@ const CocteleraVirtual: React.FC<CocteleraVirtualProps> = ({ onVolver }) => {
           <h3>Tipo de Licor</h3>
           <SelectorLicor licor={licor} setLicor={handleSetLicor} />
         </div>
+        {notificacion && (
+        <div className="notificacion-carrito">
+          {notificacion}
+        </div>
+        )}
         {licor && (
           <div className="tarjeta-seleccion tarjeta-marca">
             <h3>Marca del Licor</h3>
